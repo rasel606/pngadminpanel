@@ -3,7 +3,6 @@ import { CCard, CCardHeader, CCardBody, CRow, CCol, CTable, CTableHead, CTableRo
 import { cilSearch, cilFilter, cilSync } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { transactions } from '../../service/api.js';
-import { io } from 'socket.io-client';
 
 const Deposits = () => {
   const [deposits, setDeposits] = useState([]);
