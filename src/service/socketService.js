@@ -43,7 +43,7 @@ import { io } from 'socket.io-client'
 //     });
 // console.log("Token:", token, "User:", user);
 //     // Create new connection with proper authentication
-//     this.socket = io('http://api.tiger55.online', {
+//     this.socket = io('https://api.tiger55.online', {
 //       auth: {
 //         token: token
 //       },
@@ -469,7 +469,7 @@ class SocketService {
           userId: user?.userId,
         })
 
-        this.socket = io('http://api.tiger55.online', {
+        this.socket = io(import.meta.env.VITE_SOCKET_URL || 'https://api.tiger55.online', {
           auth: {
             token: token,
           },

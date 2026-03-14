@@ -4,7 +4,7 @@ import { authService } from './authService'
 
 class LiveChatService {
   constructor() {
-    this.API_BASE_URL = 'http://api.tiger55.online/api'
+    this.API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.tiger55.online/api'
     this.uploadCallbacks = new Map()
   }
 

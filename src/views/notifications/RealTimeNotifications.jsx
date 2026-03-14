@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { CCard, CCardBody, CAlert, CListGroup, CListGroupItem } from '@coreui/react'
 
-const wsUrl = 'ws://localhost:3001/notifications' // Update to your backend WebSocket endpoint
+const wsUrl = (() => {
+  const base = import.meta.env.VITE_SOCKET_URL || 'https://api.tiger55.online'
+  // Convert http(s) origin to a WebSocket URL for the notifications path
+  return base.replace(/^http/, 'ws') + '/notifications'
+})()
 
 const RealTimeNotifications = () => {
   const [notifications, setNotifications] = useState([])
