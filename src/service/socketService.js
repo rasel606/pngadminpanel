@@ -1,4 +1,5 @@
 import { io } from 'socket.io-client'
+import { getSecureSocketUrl } from '../utils/socketUtils'
 
 // class SocketService {
 //   constructor() {
@@ -469,7 +470,7 @@ class SocketService {
           userId: user?.userId,
         })
 
-        this.socket = io(import.meta.env.VITE_SOCKET_URL || 'https://api.tiger55.online', {
+        this.socket = io(getSecureSocketUrl(import.meta.env.VITE_SOCKET_URL || 'https://api.tiger55.online'), {
           auth: {
             token: token,
           },

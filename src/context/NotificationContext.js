@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback, useContext } from 'react';
 import io from 'socket.io-client';
+import { getSecureSocketUrl } from '../utils/socketUtils'
 
 export const NotificationContext = createContext();
 
@@ -11,7 +12,7 @@ export const NotificationProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const socketUrl = import.meta.env.VITE_SOCKET_URL || 'https://api.tiger55.online';
+    const socketUrl = getSecureSocketUrl(import.meta.env.VITE_SOCKET_URL || 'https://api.tiger55.online');
     const token = localStorage.getItem('token') || '';
     const newSocket = io(socketUrl, { 
       auth: { token },
