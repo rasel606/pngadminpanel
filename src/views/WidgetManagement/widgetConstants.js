@@ -1,0 +1,277 @@
+/**
+ * Widget Constants and Types
+ */
+
+export const WIDGET_TYPES = {
+  BANNER: 'banner',
+  PROMOTION: 'promotion',
+  ANNOUNCEMENT: 'announcement',
+  GAME_SPOTLIGHT: 'game_spotlight',
+  CUSTOM_HTML: 'custom_html',
+  IMAGE: 'image',
+  VIDEO: 'video',
+  COUNTDOWN: 'countdown',
+  SOCIAL_FEED: 'social_feed',
+  LIVE_STATS: 'live_stats',
+  NEWS_TICKER: 'news_ticker',
+  POPUP: 'popup',
+  HERO_CAROUSEL: 'hero_carousel',
+  NOTICE_MARQUEE: 'notice_marquee',
+  CATEGORY_NAV: 'category_nav',
+  IMAGE_SCROLLER: 'image_scroller',
+  GAME_GRID: 'game_grid',
+  PAYMENT_METHODS: 'payment_methods',
+  FOOTER_LINKS: 'footer_links',
+  FLOATING_BANNER: 'floating_banner',
+  TOOLBAR_MENU: 'toolbar_menu',
+}
+
+export const WIDGET_POSITIONS = {
+  TOP_BAR: 'top_bar',
+  ANNOUNCEMENT_BAR: 'announcement_bar',
+  HEADER: 'header',
+  NAVIGATION: 'navigation',
+  SIDEBAR_LEFT: 'sidebar_left',
+  SIDEBAR_RIGHT: 'sidebar_right',
+  MAIN_TOP: 'main_top',
+  MAIN_MIDDLE: 'main_middle',
+  MAIN_BOTTOM: 'main_bottom',
+  RECOMMENDATION: 'recommendation',
+  GAMES_SECTION: 'games_section',
+  FOOTER_TOP: 'footer_top',
+  FOOTER_BOTTOM: 'footer_bottom',
+  FLOATING: 'floating',
+  TOOLBAR: 'toolbar',
+  MEMBER_MENU: 'member_menu',
+  POPUP_LAYER: 'popup_layer',
+  MODAL: 'modal',
+  }
+
+export const WIDGET_STATUS = {
+  ACTIVE: 'active',
+  INACTIVE: 'inactive',
+  DRAFT: 'draft',
+}
+
+export const WIDGET_DISPLAY_MODES = {
+  ALWAYS: 'always',
+  LOGGED_IN: 'logged_in',
+  LOGGED_OUT: 'logged_out',
+  FIRST_TIME: 'first_time',
+  CUSTOM: 'custom',
+}
+
+export const WIDGET_ANIMATIONS = {
+  NONE: 'none',
+  FADE: 'fade',
+  SLIDE_IN: 'slide_in',
+  ZOOM: 'zoom',
+  BOUNCE: 'bounce',
+}
+
+export const WIDGET_TYPE_CONFIGS = {
+  [WIDGET_TYPES.BANNER]: {
+    label: 'Banner Widget',
+    icon: '🎯',
+    description: 'Image or text banner with optional call-to-action',
+    color: 'primary',
+    fields: ['imageUrl', 'title', 'description', 'ctaText', 'ctaLink'],
+  },
+  [WIDGET_TYPES.PROMOTION]: {
+    label: 'Promotion Widget',
+    icon: '🎁',
+    description: 'Promotional content with special offers',
+    color: 'success',
+    fields: ['promoId', 'imageUrl', 'title', 'description', 'terms', 'ctaText', 'ctaLink'],
+  },
+  [WIDGET_TYPES.ANNOUNCEMENT]: {
+    label: 'Announcement Widget',
+    icon: '📢',
+    description: 'Important announcements and notifications',
+    color: 'warning',
+    fields: ['message', 'type', 'icon', 'link'],
+  },
+  [WIDGET_TYPES.GAME_SPOTLIGHT]: {
+    label: 'Game Spotlight',
+    icon: '🎮',
+    description: 'Highlight and showcase featured games',
+    color: 'info',
+    fields: ['gameIds', 'layout', 'showTitle', 'title'],
+  },
+  [WIDGET_TYPES.CUSTOM_HTML]: {
+    label: 'Custom HTML',
+    icon: '📝',
+    description: 'Custom HTML/CSS/JavaScript content',
+    color: 'secondary',
+    fields: ['html', 'css', 'js'],
+  },
+  [WIDGET_TYPES.IMAGE]: {
+    label: 'Image Widget',
+    icon: '🖼️',
+    description: 'Single image with optional link',
+    color: 'primary',
+    fields: ['imageUrl', 'alt', 'link', 'openInNewTab'],
+  },
+  [WIDGET_TYPES.VIDEO]: {
+    label: 'Video Widget',
+    icon: '🎬',
+    description: 'Embedded video player',
+    color: 'danger',
+    fields: ['videoUrl', 'thumbnail', 'autoplay', 'muted', 'loop'],
+  },
+  [WIDGET_TYPES.COUNTDOWN]: {
+    label: 'Countdown Timer',
+    icon: '⏰',
+    description: 'Countdown to specific date or event',
+    color: 'warning',
+    fields: ['targetDate', 'title', 'completionMessage', 'completionAction'],
+  },
+  [WIDGET_TYPES.SOCIAL_FEED]: {
+    label: 'Social Feed',
+    icon: '👥',
+    description: 'Social media feed integration',
+    color: 'info',
+    fields: ['platform', 'feedUrl', 'maxItems'],
+  },
+  [WIDGET_TYPES.LIVE_STATS]: {
+    label: 'Live Statistics',
+    icon: '📊',
+    description: 'Real-time statistics display',
+    color: 'success',
+    fields: ['statsType', 'refreshInterval'],
+  },
+  [WIDGET_TYPES.NEWS_TICKER]: {
+    label: 'News Ticker',
+    icon: '📰',
+    description: 'Scrolling news ticker',
+    color: 'dark',
+    fields: ['items', 'speed', 'direction'],
+  },
+  [WIDGET_TYPES.POPUP]: {
+    label: 'Popup Modal',
+    icon: '🎭',
+    description: 'Modal popup dialog',
+    color: 'danger',
+    fields: ['title', 'content', 'imageUrl', 'showOnLoad', 'delay', 'frequency'],
+  },
+  [WIDGET_TYPES.HERO_CAROUSEL]: {
+    label: 'Hero Carousel',
+    icon: '🎠',
+    description: 'Main hero slider with image slides and CTA',
+    color: 'primary',
+    fields: ['slides', 'autoplay', 'delay', 'showDots'],
+  },
+  [WIDGET_TYPES.NOTICE_MARQUEE]: {
+    label: 'Notice Marquee',
+    icon: '📣',
+    description: 'Scrolling announcement line',
+    color: 'warning',
+    fields: ['items', 'speed', 'direction'],
+  },
+  [WIDGET_TYPES.CATEGORY_NAV]: {
+    label: 'Category Navigation',
+    icon: '🧭',
+    description: 'Game category icon navigation',
+    color: 'info',
+    fields: ['items', 'layout'],
+  },
+  [WIDGET_TYPES.IMAGE_SCROLLER]: {
+    label: 'Image Scroller',
+    icon: '🖼️',
+    description: 'Horizontally scrollable cards/images',
+    color: 'secondary',
+    fields: ['items', 'title'],
+  },
+  [WIDGET_TYPES.GAME_GRID]: {
+    label: 'Game Grid',
+    icon: '🎲',
+    description: 'Grid list of game cards',
+    color: 'success',
+    fields: ['items', 'title', 'layout'],
+  },
+  [WIDGET_TYPES.PAYMENT_METHODS]: {
+    label: 'Payment Methods',
+    icon: '💳',
+    description: 'Payment logos in grid',
+    color: 'dark',
+    fields: ['items', 'title'],
+  },
+  [WIDGET_TYPES.FOOTER_LINKS]: {
+    label: 'Footer Links',
+    icon: '🔗',
+    description: 'Footer quick links',
+    color: 'secondary',
+    fields: ['items', 'title'],
+  },
+  [WIDGET_TYPES.FLOATING_BANNER]: {
+    label: 'Floating Banner',
+    icon: '🫧',
+    description: 'Fixed floating quick action/banner',
+    color: 'danger',
+    fields: ['imageUrl', 'link', 'position'],
+  },
+  [WIDGET_TYPES.TOOLBAR_MENU]: {
+    label: 'Toolbar Menu',
+    icon: '🧰',
+    description: 'Bottom toolbar entries',
+    color: 'info',
+    fields: ['items'],
+  },
+}
+
+export const POSITION_LABELS = {
+  [WIDGET_POSITIONS.TOP_BAR]: 'Top Bar',
+  [WIDGET_POSITIONS.ANNOUNCEMENT_BAR]: 'Announcement Bar',
+  [WIDGET_POSITIONS.HEADER]: 'Header',
+  [WIDGET_POSITIONS.NAVIGATION]: 'Navigation',
+  [WIDGET_POSITIONS.SIDEBAR_LEFT]: 'Left Sidebar',
+  [WIDGET_POSITIONS.SIDEBAR_RIGHT]: 'Right Sidebar',
+  [WIDGET_POSITIONS.MAIN_TOP]: 'Main Content - Top',
+  [WIDGET_POSITIONS.MAIN_MIDDLE]: 'Main Content - Middle',
+  [WIDGET_POSITIONS.MAIN_BOTTOM]: 'Main Content - Bottom',
+  [WIDGET_POSITIONS.RECOMMENDATION]: 'Recommendation',
+  [WIDGET_POSITIONS.GAMES_SECTION]: 'Games Section',
+  [WIDGET_POSITIONS.FOOTER_TOP]: 'Footer - Top',
+  [WIDGET_POSITIONS.FOOTER_BOTTOM]: 'Footer - Bottom',
+  [WIDGET_POSITIONS.FLOATING]: 'Floating Widget',
+  [WIDGET_POSITIONS.TOOLBAR]: 'Toolbar',
+  [WIDGET_POSITIONS.MEMBER_MENU]: 'Member Menu',
+  [WIDGET_POSITIONS.POPUP_LAYER]: 'Popup Layer',
+  [WIDGET_POSITIONS.MODAL]: 'Modal / Popup',
+}
+
+export const STATUS_COLORS = {
+  [WIDGET_STATUS.ACTIVE]: 'success',
+  [WIDGET_STATUS.INACTIVE]: 'secondary',
+  [WIDGET_STATUS.DRAFT]: 'warning',
+}
+
+export const DEFAULT_WIDGET = {
+  id: null,
+  // Backend requires a unique widget name; default empty to force user input
+  name: '',
+  type: WIDGET_TYPES.BANNER,
+  position: WIDGET_POSITIONS.MAIN_TOP,
+  status: WIDGET_STATUS.INACTIVE,
+  displayMode: WIDGET_DISPLAY_MODES.ALWAYS,
+  animation: WIDGET_ANIMATIONS.FADE,
+  priority: 0,
+  title: '',
+  content: {},
+  styles: {},
+  settings: {
+    dismissible: true,
+    autoHide: false,
+    autoHideDelay: 0,
+    showOnPages: [],
+    hideOnPages: [],
+    startDate: null,
+    endDate: null,
+    maxViews: null,
+  },
+  metadata: {
+    createdAt: null,
+    updatedAt: null,
+    createdBy: null,
+  },
+}
