@@ -523,6 +523,54 @@ sudo systemctl status certbot.timer
 sudo certbot renew --dry-run
 ```
 
+### 10.1 Optional: Auto-Renew API SSL + Reapply Nginx via systemd Timer
+
+If your repository is present on the server (for example at `~/apps/frontend` or `/opt/pngadminpanel`),
+you can enable a dedicated timer that runs:
+
+- `scripts/ensure-api-ssl-and-apply-nginx.sh`
+- `scripts/apply-nginx-api-config.sh`
+
+This keeps API TLS renewal and Nginx API config application in one scheduled flow.
+
+Install and enable the timer:
+
+```bash
+# 🌐 SERVER (as deploy user)
+cd ~/apps/frontend
+REPO_DIR="$PWD" bash scripts/install-api-ssl-renew-timer.sh
+```
+
+Set email/domain values used by Certbot:
+
+```bash
+# 🌐 SERVER (as deploy user)
+sudo nano /etc/default/tiger55-api-ssl-renew
+```
+
+Recommended contents:
+
+```dotenv
+CERTBOT_EMAIL=admin@tiger55.online
+API_DOMAIN=api.tiger55.online
+CERTBOT_STAGING=0
+DRY_RUN=0
+```
+
+Test immediately (do not wait for the schedule):
+
+```bash
+# 🌐 SERVER (as deploy user)
+sudo systemctl start tiger55-api-ssl-renew.service
+sudo journalctl -u tiger55-api-ssl-renew.service -n 100 --no-pager
+sudo systemctl list-timers | grep tiger55-api-ssl-renew
+```
+
+Notes:
+- Default schedule is daily (`03:17`) with randomized delay (`RandomizedDelaySec=30m`).
+- If `certbot`/`apt` returns code `100`, verify you are running on the VPS (not local machine/CI container),
+  then run `sudo apt-get update` and retry.
+
 ---
 
 ## 11. Enable Automatic Deployment via GitHub Actions

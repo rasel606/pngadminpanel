@@ -12,9 +12,16 @@ BUILD_DIR="$APP_DIR/build"
 NGINX_ROOT="/var/www/tiger55-frontend"
 REPO_URL="${FRONTEND_REPO_URL:-https://github.com/rasel606/pngadminpanel.git}"
 
+# Enforce secure production build defaults to prevent mixed-content ws:// issues.
+# Values can still be overridden by exporting VITE_API_URL / VITE_SOCKET_URL before running.
+VITE_API_URL="${VITE_API_URL:-https://api.tiger55.online/api}"
+VITE_SOCKET_URL="${VITE_SOCKET_URL:-https://api.tiger55.online}"
+
 echo "============================================================"
 echo "  Deploying React Frontend  (branch: $BRANCH)"
 echo "============================================================"
+echo "  VITE_API_URL:    $VITE_API_URL"
+echo "  VITE_SOCKET_URL: $VITE_SOCKET_URL"
 
 # Load NVM
 export NVM_DIR="$HOME/.nvm"
@@ -47,6 +54,8 @@ npm install
 
 # --- Build the app ---
 echo "[3/4] Building production bundle..."
+export VITE_API_URL
+export VITE_SOCKET_URL
 npm run build
 
 echo "  Build complete. Output: $BUILD_DIR"

@@ -1,0 +1,14 @@
+[Unit]
+Description=Renew API TLS cert and apply Nginx API config
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/pngadminpanel
+Environment=API_DOMAIN=api.tiger55.online
+EnvironmentFile=-/etc/default/tiger55-api-ssl-renew
+ExecStart=/usr/bin/env bash scripts/ensure-api-ssl-and-apply-nginx.sh
+
+[Install]
+WantedBy=multi-user.target
