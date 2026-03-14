@@ -1,8 +1,50 @@
 // src/service/getWayService.js
 import { apiService, transactions } from './api'
 
+const tryGetFromEndpoints = async (endpoints, params = {}, fallbackValue = null) => {
+  let lastError
+
+  for (const endpoint of endpoints) {
+    try {
+      return await apiService.get(endpoint, params)
+    } catch (error) {
+      lastError = error
+    }
+  }
+
+  if (fallbackValue !== null) {
+    return fallbackValue
+  }
+
+  throw lastError || new Error('Request failed for all fallback endpoints')
+}
+
 export const getWayService = {
-  searchTransactionsDeposit: (params) => transactions.searchDeposits(params),
+  searchTransactionsDeposit: async (params = {}) => {
+    try {
+      return await transactions.searchDeposits(params)
+    } catch (error) {
+      const message = String(error?.message || '').toLowerCase()
+      const shouldTryLegacy =
+        error?.status === 404 ||
+        error?.status >= 500 ||
+        message.includes('searchdeposits is not a function') ||
+        message.includes('transactionservice.searchdeposits')
+
+      if (!shouldTryLegacy) {
+        throw error
+      }
+
+      return tryGetFromEndpoints(
+        [
+          '/transactions/search_deposit_transactions',
+          '/transactions/search_Deposit_transactions',
+          '/transactions/search_deposit_transaction',
+        ],
+        params,
+      )
+    }
+  },
   searchTransactionsWidthrawal: async (params) => {
     const emptyResult = {
       success: true,
@@ -52,14 +94,27 @@ export const getWayService = {
     return response // apiService.get already returns parsed JSON
   },
   TransactionsDepositGetways: async (params = {}) => {
-    // ✅ use GET with query params
-    const response = await apiService.get('/transactions/search_deposit_getways', params)
-    return response // apiService.get already returns parsed JSON
+    return tryGetFromEndpoints(
+      [
+        '/transactions/search_deposit_getways',
+        '/transactions/search_deposit_gateways',
+        '/transactions/deposit-gateways/search',
+      ],
+      params,
+      { success: true, transactions: [], count: 0 },
+    )
   },
   TransactionsWEidthrawalGetways: async (params = {}) => {
-    // ✅ use GET with query params
-    const response = await apiService.get('/transactions/search_widthrawal_getways', params)
-    return response // apiService.get already returns parsed JSON
+    return tryGetFromEndpoints(
+      [
+        '/transactions/search_widthrawal_getways',
+        '/transactions/search_withdrawal_getways',
+        '/transactions/search_withdrawal_gateways',
+        '/transactions/withdrawal-gateways/search',
+      ],
+      params,
+      { success: true, transactions: [], count: 0 },
+    )
   },
 
   updateDepositStatus: async (transactionID, userId, actionType) => {

@@ -58,9 +58,10 @@ export const adminServices = {
   AgentWithdrawList: async (params = {}) => {
     const response = await tryGetFromEndpoints(
       [
+        '/admin/get_sub_admin_withdraw_deposit_user_list',
+        '/admin/get_admin_agent_user_withdraw_user_list',
         '/admin/get_admin_agent_user_withdraw__user_list',
         '/admin/get_admin_agent_user_withdraw_deposit_user_list',
-        '/admin/get_sub_admin_withdraw_deposit_user_list',
       ],
       params,
       { success: true, data: [] },

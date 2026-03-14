@@ -202,7 +202,7 @@ const PaymenWidthralFullView = () => {
   const fetchGateways = async () => {
     setLoading(true)
     try {
-      const res = await getWayService.TransactionsDepositGetways(filters)
+      const res = await getWayService.TransactionsWEidthrawalGetways(filters)
       setGateways(res.transactions || [])
       setGatewayCount(res?.count || 0)
     } catch (err) {
