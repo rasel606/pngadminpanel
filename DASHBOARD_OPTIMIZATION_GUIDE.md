@@ -101,7 +101,7 @@ const AdvancedDashboard = React.lazy(() =>
 
 ### API Endpoint
 ```
-GET http://localhost:5000/api/dashboard/analytics/summary?startDate=2024-01-01&endDate=2024-03-06&timeZone=UTC
+GET http://api.tiger55.online/api/dashboard/analytics/summary?startDate=2024-01-01&endDate=2024-03-06&timeZone=UTC
 ```
 
 ### Query Parameters
@@ -192,7 +192,7 @@ const CACHE_DURATION = 5 * 60 * 1000 // milliseconds
 ## Troubleshooting
 
 ### Dashboard Not Loading
-1. Check backend is running: `http://localhost:5000`
+1. Check backend is running: `http://api.tiger55.online`
 2. Verify auth token in localStorage: `admin_auth_token`
 3. Check browser console for errors
 4. Clear cache: `CacheManager.clear()`
@@ -249,7 +249,7 @@ npm start
 ```bash
 cd backend
 npm start
-# Test API: curl http://localhost:5000/api/dashboard/analytics/summary
+# Test API: curl http://api.tiger55.online/api/dashboard/analytics/summary
 ```
 
 ### Performance Test

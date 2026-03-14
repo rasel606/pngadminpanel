@@ -60,7 +60,7 @@ ChartJS.register(
   Filler,
 )
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://api.tiger55.online/api'
 const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes cache
 
 // Optimized cache manager

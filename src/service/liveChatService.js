@@ -4,7 +4,7 @@ import { authService } from './authService'
 
 class LiveChatService {
   constructor() {
-    this.API_BASE_URL = 'http://localhost:5000/api'
+    this.API_BASE_URL = 'http://api.tiger55.online/api'
     this.uploadCallbacks = new Map()
   }
 
