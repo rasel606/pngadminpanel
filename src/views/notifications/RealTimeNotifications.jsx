@@ -3,8 +3,16 @@ import { CCard, CCardBody, CAlert, CListGroup, CListGroupItem } from '@coreui/re
 
 const wsUrl = (() => {
   const base = import.meta.env.VITE_SOCKET_URL || 'https://api.tiger55.online'
-  // Convert http(s) origin to a WebSocket URL for the notifications path
-  return base.replace(/^http/, 'ws') + '/notifications'
+  // Extract only the host (hostname + port) so any path in the base URL is ignored.
+  // Always use wss:// on HTTPS pages to avoid Mixed Content errors.
+  let host
+  try {
+    host = new URL(base).host
+  } catch {
+    host = base.replace(/^https?:\/\//, '').split('/')[0]
+  }
+  const wsProtocol = typeof window !== 'undefined' && window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+  return `${wsProtocol}//${host}/notifications`
 })()
 
 const RealTimeNotifications = () => {

@@ -7,6 +7,7 @@ class NotificationWorker {
     this.reconnectDelay = 1000
     this.isConnected = false
     this.userId = null
+    this.socketUrl = null
     this.notificationCache = new Map()
     this.backgroundSyncQueue = []
     this.init()
@@ -32,6 +33,7 @@ class NotificationWorker {
     switch (type) {
       case 'INIT':
         this.userId = payload.userId
+        this.socketUrl = payload.socketUrl || null
         this.initWebSocket()
         break
 
@@ -67,8 +69,21 @@ class NotificationWorker {
   initWebSocket() {
     if (!this.userId) return
 
-    const protocol = self.location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const wsUrl = `${protocol}//${self.location.host}/ws/notifications/${this.userId}`
+    const wsProtocol = self.location.protocol === 'https:' ? 'wss:' : 'ws:'
+    // Use the API server host from the socketUrl passed via INIT, falling back to
+    // self.location.host only when no socketUrl is available (e.g. same-origin setup).
+    // Extract only the host (hostname + port) so any path in the URL is ignored.
+    let host
+    if (this.socketUrl) {
+      try {
+        host = new URL(this.socketUrl).host
+      } catch {
+        host = this.socketUrl.replace(/^https?:\/\//, '').split('/')[0]
+      }
+    } else {
+      host = self.location.host
+    }
+    const wsUrl = `${wsProtocol}//${host}/ws/notifications/${this.userId}`
 
     try {
       this.websocket = new WebSocket(wsUrl)
