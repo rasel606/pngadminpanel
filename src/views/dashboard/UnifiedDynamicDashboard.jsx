@@ -68,8 +68,9 @@ ChartJS.register(
   Legend,
   Filler,
 )
+import { getSecureHttpUrl } from '../../utils/socketUtils'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.tiger55.online/api'
+const API_BASE_URL = getSecureHttpUrl(import.meta.env.VITE_API_URL || 'https://api.tiger55.online/api')
 
 const UnifiedDynamicDashboard = () => {
   // =============================================

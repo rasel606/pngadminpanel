@@ -5,6 +5,7 @@
 [build.environment]
   NODE_VERSION = "18"
   VITE_API_URL = "https://your-backend-url.netlify.app"
+  VITE_SOCKET_URL = "https://your-backend-url.netlify.app"
 
 [[redirects]]
   from = "/api/*"

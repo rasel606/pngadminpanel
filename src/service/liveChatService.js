@@ -1,10 +1,11 @@
 // src/service/liveChatService.js
 import { apiService } from './api'
 import { authService } from './authService'
+import { getSecureHttpUrl } from '../utils/socketUtils'
 
 class LiveChatService {
   constructor() {
-    this.API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.tiger55.online/api'
+    this.API_BASE_URL = getSecureHttpUrl(import.meta.env.VITE_API_URL || 'https://api.tiger55.online/api')
     this.uploadCallbacks = new Map()
   }
 

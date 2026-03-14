@@ -1,0 +1,11 @@
+[Unit]
+Description=Run API TLS renewal + Nginx apply daily
+
+[Timer]
+OnCalendar=*-*-* 03:17:00
+RandomizedDelaySec=30m
+Persistent=true
+Unit=tiger55-api-ssl-renew.service
+
+[Install]
+WantedBy=timers.target
