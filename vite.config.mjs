@@ -5,13 +5,13 @@ import autoprefixer from 'autoprefixer'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const apiUrl = (env.VITE_API_URL || 'http://api.tiger55.online/api').trim()
+  const apiUrl = (env.VITE_API_URL || 'https://api.tiger55.online/api').trim()
 
-  let proxyTarget = 'http://api.tiger55.online'
+  let proxyTarget = 'https://api.tiger55.online'
   try {
     proxyTarget = new URL(apiUrl).origin
   } catch {
-    proxyTarget = 'http://api.tiger55.online'
+    proxyTarget = 'https://api.tiger55.online'
   }
 
   return {

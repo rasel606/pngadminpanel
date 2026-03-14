@@ -69,7 +69,7 @@ ChartJS.register(
   Filler,
 )
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://api.tiger55.online/api'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.tiger55.online/api'
 
 const UnifiedDynamicDashboard = () => {
   // =============================================

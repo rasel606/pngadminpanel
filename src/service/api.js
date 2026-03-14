@@ -1,6 +1,6 @@
 // services/api.js
 // Configure based on environment (Vite: use import.meta.env.VITE_*)
-const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://api.tiger55.online/api').trim()
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://api.tiger55.online/api').trim()
 const API_FALLBACK_URL = (import.meta.env.VITE_API_FALLBACK_URL || '').trim()
 const API_ENABLE_FALLBACK = import.meta.env.VITE_ENABLE_API_FALLBACK === 'true'
 

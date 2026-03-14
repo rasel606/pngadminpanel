@@ -59,6 +59,7 @@ jobs:
         env:
           # Point the built app at the production API
           VITE_API_URL: https://api.tiger55.online/api
+          VITE_SOCKET_URL: https://api.tiger55.online
           VITE_ENV: production
 
       # -------------------------------------------------------------------------
