@@ -1,3 +1,5 @@
+import { getSecureSocketUrl } from '../utils/socketUtils'
+
 class WebWorkerService {
   constructor() {
     this.worker = null
@@ -202,7 +204,7 @@ class WebWorkerService {
       const result = await this.sendToWorker('INIT', {
         userId,
         userData,
-        socketUrl: import.meta.env.VITE_SOCKET_URL || 'https://api.tiger55.online',
+        socketUrl: getSecureSocketUrl(import.meta.env.VITE_SOCKET_URL || 'https://api.tiger55.online'),
         timestamp: Date.now(),
       })
 
