@@ -15,16 +15,9 @@ class NotificationWorker {
 
   init() {
     self.addEventListener('message', this.handleMessage.bind(this))
+    self.addEventListener('online', this.handleOnline.bind(this))
+    self.addEventListener('offline', this.handleOffline.bind(this))
     setInterval(() => this.processBackgroundSync(), 30000) // Every 30s
-  }
-
-  scheduleReconnection() {
-    setTimeout(() => {
-      this.reconnectAttempts++
-      if (this.reconnectAttempts < this.maxReconnectAttempts) {
-        this.initWebSocket()
-      }
-    }, this.reconnectDelay)
   }
 
   handleMessage(event) {
