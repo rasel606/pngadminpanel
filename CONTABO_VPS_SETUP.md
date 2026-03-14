@@ -41,9 +41,10 @@ Every command block is labelled with where to run it:
 8. [Deploy the React Frontend](#8-deploy-the-react-frontend)
 9. [Configure Nginx](#9-configure-nginx)
 10. [Secure with SSL — Let's Encrypt](#10-secure-with-ssl--lets-encrypt)
-11. [Verify Everything Is Running](#11-verify-everything-is-running)
-12. [Updating After a Code Push](#12-updating-after-a-code-push)
-13. [Useful Commands Reference](#13-useful-commands-reference)
+11. [Enable Automatic Deployment via GitHub Actions](#11-enable-automatic-deployment-via-github-actions)
+12. [Verify Everything Is Running](#12-verify-everything-is-running)
+13. [Updating After a Code Push](#13-updating-after-a-code-push)
+14. [Useful Commands Reference](#14-useful-commands-reference)
 
 ---
 
@@ -352,7 +353,7 @@ git clone https://github.com/rasel606/pngadminpanel.git frontend
 cd frontend
 npm install
 npm run build
-# Build output is in ~/apps/frontend/dist/
+# Build output is in ~/apps/frontend/build/
 ```
 
 ### 8.2 Copy the Build to the Nginx Web Root
@@ -360,7 +361,7 @@ npm run build
 ```bash
 # 🌐 SERVER (as deploy user)
 sudo mkdir -p /var/www/tiger55-frontend
-sudo rsync -av --delete ~/apps/frontend/dist/ /var/www/tiger55-frontend/
+sudo rsync -av --delete ~/apps/frontend/build/ /var/www/tiger55-frontend/
 sudo chown -R www-data:www-data /var/www/tiger55-frontend
 sudo chmod -R 755 /var/www/tiger55-frontend
 ```
@@ -524,7 +525,75 @@ sudo certbot renew --dry-run
 
 ---
 
-## 11. Verify Everything Is Running
+## 11. Enable Automatic Deployment via GitHub Actions
+
+Once this step is complete, **every push to the `main` branch automatically builds
+and deploys the frontend** — no manual steps needed.
+
+The workflow lives in `.github/workflows/deploy.yml` and requires three GitHub Secrets.
+
+### 11.1 Allow the Deploy User to Run Nginx Commands Without a Password
+
+The GitHub Actions runner needs to reload Nginx over SSH. Grant passwordless `sudo`
+for just those commands (run this **on the server** as root):
+
+```bash
+# 🌐 SERVER (as root)
+cat > /etc/sudoers.d/deploy-nginx <<'EOF'
+deploy ALL=(ALL) NOPASSWD: /usr/bin/chown -R www-data:www-data /var/www/tiger55-frontend, \
+                           /usr/bin/chmod -R 755 /var/www/tiger55-frontend, \
+                           /usr/sbin/nginx -t, \
+                           /usr/bin/systemctl reload nginx
+EOF
+chmod 440 /etc/sudoers.d/deploy-nginx
+# Verify the file is valid
+visudo -c -f /etc/sudoers.d/deploy-nginx && echo "sudoers file OK"
+```
+
+### 11.2 Add GitHub Secrets
+
+In your GitHub repository go to **Settings → Secrets and variables → Actions → New repository secret**
+and add all three secrets:
+
+| Secret name | Value |
+|---|---|
+| `DEPLOY_HOST` | `161.97.180.157` |
+| `DEPLOY_USER` | `deploy` |
+| `DEPLOY_SSH_KEY` | The **private** key (not `.pub`) — see below |
+
+**Get your private key:**
+
+```powershell
+# 🖥️ LOCAL — PowerShell (copy the entire output including the BEGIN/END lines)
+Get-Content "$env:USERPROFILE\.ssh\id_ed25519"
+```
+
+```bash
+# 🖥️ LOCAL — Mac/Linux
+cat ~/.ssh/id_ed25519
+```
+
+Paste the entire output (including `-----BEGIN OPENSSH PRIVATE KEY-----` and the
+closing line) into the `DEPLOY_SSH_KEY` secret.
+
+### 11.3 Trigger Your First Auto-Deploy
+
+```powershell
+# 🖥️ LOCAL — PowerShell: make any small change and push
+git add .
+git commit -m "chore: trigger first auto-deploy"
+git push origin main
+```
+
+Then go to **GitHub → Actions → Deploy Frontend to VPS** to watch the run live.
+
+After a green checkmark, your site is live at `https://tiger55.online`.
+
+> You can also trigger it manually any time: **GitHub → Actions → Deploy Frontend to VPS → Run workflow → Run workflow**.
+
+---
+
+## 12. Verify Everything Is Running
 
 ```bash
 # 🌐 SERVER (as deploy user)
@@ -547,7 +616,7 @@ curl https://api.tiger55.online/api/health
 
 ---
 
-## 12. Updating After a Code Push
+## 13. Updating After a Code Push
 
 ### Backend update (run on the server):
 
@@ -568,7 +637,7 @@ cd ~/apps/frontend
 git pull origin main
 npm install
 npm run build
-sudo rsync -av --delete ~/apps/frontend/dist/ /var/www/tiger55-frontend/
+sudo rsync -av --delete ~/apps/frontend/build/ /var/www/tiger55-frontend/
 sudo chown -R www-data:www-data /var/www/tiger55-frontend
 ```
 
@@ -581,7 +650,7 @@ bash ~/apps/frontend/scripts/deploy-frontend.sh
 
 ---
 
-## 13. Useful Commands Reference
+## 14. Useful Commands Reference
 
 ### PM2
 

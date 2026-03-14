@@ -8,7 +8,7 @@ set -euo pipefail
 
 BRANCH="${1:-main}"
 APP_DIR="$HOME/apps/frontend"
-DIST_DIR="$APP_DIR/dist"
+BUILD_DIR="$APP_DIR/build"
 NGINX_ROOT="/var/www/tiger55-frontend"
 REPO_URL="${FRONTEND_REPO_URL:-https://github.com/rasel606/pngadminpanel.git}"
 
@@ -49,14 +49,14 @@ npm install
 echo "[3/4] Building production bundle..."
 npm run build
 
-echo "  Build complete. Output: $DIST_DIR"
+echo "  Build complete. Output: $BUILD_DIR"
 
 # --- Deploy to Nginx web root ---
 echo "[4/4] Deploying to Nginx web root..."
 sudo mkdir -p "$NGINX_ROOT"
 # Note: --delete removes files from the destination that no longer exist in the
 # source. $NGINX_ROOT is dedicated to this application only.
-sudo rsync -av --delete "$DIST_DIR/" "$NGINX_ROOT/"
+sudo rsync -av --delete "$BUILD_DIR/" "$NGINX_ROOT/"
 sudo chown -R www-data:www-data "$NGINX_ROOT"
 sudo chmod -R 755 "$NGINX_ROOT"
 

@@ -1,0 +1,97 @@
+# =============================================================================
+# deploy.yml — Automatically build and deploy the React frontend to the VPS
+#              whenever code is pushed to the main branch.
+#
+# Required GitHub Secrets (Settings → Secrets and variables → Actions → New):
+#
+#   DEPLOY_HOST       IP address of the server, e.g. 161.97.180.157
+#   DEPLOY_USER       SSH username on the server, e.g. deploy
+#   DEPLOY_SSH_KEY    Contents of the private SSH key (id_ed25519), not the .pub file
+#
+# How to get your private key:
+#   Windows: Get-Content "$env:USERPROFILE\.ssh\id_ed25519"
+#   Mac/Linux: cat ~/.ssh/id_ed25519
+# =============================================================================
+
+name: Deploy Frontend to VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:   # Allow manual trigger from the GitHub Actions UI
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # -------------------------------------------------------------------------
+      # 1. Checkout source code
+      # -------------------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # -------------------------------------------------------------------------
+      # 2. Set up Node.js (React 19 + Vite 7 require Node 20+)
+      # -------------------------------------------------------------------------
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # -------------------------------------------------------------------------
+      # 3. Install dependencies
+      # -------------------------------------------------------------------------
+      - name: Install dependencies
+        run: npm ci
+
+      # -------------------------------------------------------------------------
+      # 4. Build the production bundle (output: build/)
+      # -------------------------------------------------------------------------
+      - name: Build React app
+        run: npm run build
+        env:
+          # Point the built app at the production API
+          VITE_API_URL: https://api.tiger55.online/api
+          VITE_ENV: production
+
+      # -------------------------------------------------------------------------
+      # 5. Set up SSH so we can reach the VPS
+      # -------------------------------------------------------------------------
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      # -------------------------------------------------------------------------
+      # 6. Trust the server's host key (avoid interactive prompt)
+      # -------------------------------------------------------------------------
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+
+      # -------------------------------------------------------------------------
+      # 7. Sync the build folder to the VPS and reload Nginx
+      # -------------------------------------------------------------------------
+      - name: Deploy to VPS
+        run: |
+          # Sync build output to the server's Nginx web root
+          rsync -az --delete --progress \
+            ./build/ \
+            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/tiger55-frontend/"
+
+          # Fix ownership and reload Nginx (passwordless sudo for these commands
+          # must be set up on the server — see CONTABO_VPS_SETUP.md)
+          ssh "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+            "sudo chown -R www-data:www-data /var/www/tiger55-frontend && \
+             sudo chmod -R 755 /var/www/tiger55-frontend && \
+             sudo nginx -t && \
+             sudo systemctl reload nginx && \
+             echo 'Deployment complete!'"
