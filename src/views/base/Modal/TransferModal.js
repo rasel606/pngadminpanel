@@ -13,6 +13,7 @@ import {
   CAlert,
 } from '@coreui/react'
 import { adminServices } from '../../../service/adminServices'
+import ConfirmationModal from './ConfirmationModal'
 
 const TransferModal = ({ show, onHide, userId, onTransferChanged }) => {
   const [amount, setAmount] = useState('')
@@ -20,6 +21,7 @@ const TransferModal = ({ show, onHide, userId, onTransferChanged }) => {
   const [type, setType] = useState('0') // 0 = Deposit, 1 = Withdrawal
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
+  const [showConfirmation, setShowConfirmation] = useState(false)
 
   const handleSubmit = async () => {
     if (!amount || Number(amount) <= 0) {
@@ -43,6 +45,7 @@ const TransferModal = ({ show, onHide, userId, onTransferChanged }) => {
         setMessage(null)
         setAmount('')
         setType('0')
+        setShowConfirmation(false)
         onHide()
       }, 1000)
     } catch (error) {
@@ -56,43 +59,61 @@ const TransferModal = ({ show, onHide, userId, onTransferChanged }) => {
   }
 
   return (
-    <CModal visible={show} onClose={onHide}>
-      <CModalHeader closeButton>
-        <CModalTitle>Deposit / Withdrawal</CModalTitle>
-      </CModalHeader>
+    <>
+      <CModal visible={show} onClose={onHide}>
+        <CModalHeader closeButton>
+          <CModalTitle>Deposit / Withdrawal</CModalTitle>
+        </CModalHeader>
 
-      <CModalBody>
-        {message && <CAlert color={message.type}>{message.text}</CAlert>}
+        <CModalBody>
+          {message && <CAlert color={message.type}>{message.text}</CAlert>}
 
-        <CFormSelect
-          label="Transaction Type"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className="mb-3"
-        >
-          <option value="0">Deposit</option>
-          <option value="1">Withdrawal</option>
-        </CFormSelect>
+          <CFormSelect
+            label="Transaction Type"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="mb-3"
+          >
+            <option value="0">Deposit</option>
+            <option value="1">Withdrawal</option>
+          </CFormSelect>
 
-        <CFormInput
-          label="Amount"
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="Enter amount"
-          className="mb-3"
-        />
-      </CModalBody>
+          <CFormInput
+            label="Amount"
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="Enter amount"
+            className="mb-3"
+          />
+        </CModalBody>
 
-      <CModalFooter>
-        <CButton color="secondary" onClick={onHide} disabled={loading}>
-          Close
-        </CButton>
-        <CButton color="primary" onClick={handleSubmit} disabled={loading || !amount}>
-          {loading ? <CSpinner size="sm" /> : 'Submit'}
-        </CButton>
-      </CModalFooter>
-    </CModal>
+        <CModalFooter>
+          <CButton color="secondary" onClick={onHide} disabled={loading}>
+            Close
+          </CButton>
+          <CButton
+            color="primary"
+            onClick={() => setShowConfirmation(true)}
+            disabled={loading || !amount}
+          >
+            {loading ? <CSpinner size="sm" /> : 'Submit'}
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      <ConfirmationModal
+        visible={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={handleSubmit}
+        title={type === '1' ? 'Confirm Withdrawal' : 'Confirm Deposit'}
+        message={`You are about to ${type === '1' ? 'withdraw' : 'deposit'} ${amount || 0}. Continue?`}
+        variant={type === '1' ? 'danger' : 'success'}
+        confirmText={type === '1' ? 'Confirm Withdrawal' : 'Confirm Deposit'}
+        eventLabel={userId || 'Balance Transfer'}
+        loading={loading}
+      />
+    </>
   )
 }
 

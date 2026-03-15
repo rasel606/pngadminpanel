@@ -17,6 +17,8 @@ import {
   CToastHeader,
 } from '@coreui/react'
 import { adminServices } from '../../../service/adminServices'
+import './UserDetailsModal.css'
+import ConfirmationModal from './ConfirmationModal'
 
 const UserDetailsModal = ({ show, onHide, userId, onUserUpdated }) => {
   const [loading, setLoading] = useState(false)
@@ -24,6 +26,7 @@ const UserDetailsModal = ({ show, onHide, userId, onUserUpdated }) => {
   const [verifyingEmail, setVerifyingEmail] = useState(false)
   const [verifyingPhone, setVerifyingPhone] = useState(false)
   const [toasts, setToasts] = useState([])
+  const [showSaveConfirmation, setShowSaveConfirmation] = useState(false)
   const [userData, setUserData] = useState({
     username: '',
     name: '',
@@ -34,8 +37,6 @@ const UserDetailsModal = ({ show, onHide, userId, onUserUpdated }) => {
     isVerified: { email: false, phone: false },
   })
 
-  console.log('User data:', userData)
-
   useEffect(() => {
     if (show && userId) fetchUserDetails()
   }, [show, userId])
@@ -44,7 +45,6 @@ const UserDetailsModal = ({ show, onHide, userId, onUserUpdated }) => {
     setLoading(true)
     try {
       const response = await adminServices.getUserById(userId)
-      console.log('User details:', response)
       setUserData({
         username: response.user.userId || '',
         name: response.user.name || '',
@@ -63,7 +63,7 @@ const UserDetailsModal = ({ show, onHide, userId, onUserUpdated }) => {
   }
 
   const showToast = (message, color = 'success') => {
-    setToasts([...toasts, { id: Date.now(), message, color }])
+    setToasts((prev) => [...prev, { id: Date.now(), message, color }])
   }
 
   const handleSave = async () => {
@@ -72,6 +72,7 @@ const UserDetailsModal = ({ show, onHide, userId, onUserUpdated }) => {
       await adminServices.updateUserProfileById(userId, userData)
       showToast('User profile updated successfully!')
       onUserUpdated && onUserUpdated()
+      setShowSaveConfirmation(false)
       onHide()
     } catch (err) {
       console.error(err)
@@ -125,7 +126,7 @@ const UserDetailsModal = ({ show, onHide, userId, onUserUpdated }) => {
             autohide={true}
             visible={true}
             color={toast.color}
-            className="text-white"
+            className="text-white user-details-toast"
             onClose={() => setToasts(toasts.filter((t) => t.id !== toast.id))}
           >
             <CToastHeader closeButton>
@@ -137,33 +138,37 @@ const UserDetailsModal = ({ show, onHide, userId, onUserUpdated }) => {
       </CToaster>
 
       {/* ✅ Modal */}
-      <CModal visible={show} onClose={onHide} size="lg">
+      <CModal visible={show} onClose={onHide} size="xl" className="user-details-modal-glass">
         <CModalHeader closeButton>
-          <CModalTitle>Edit User Details</CModalTitle>
+          <CModalTitle>
+            <span className="user-details-modal-title">Edit User Details</span>
+          </CModalTitle>
         </CModalHeader>
         <CModalBody>
           {loading ? (
-            <div className="text-center py-5">
+            <div className="text-center py-5 user-details-loading-wrap">
               <CSpinner color="primary" />
               <p>Loading user details...</p>
             </div>
           ) : (
             <CRow className="g-3">
               <CCol xs={12} md={6}>
-                <CFormLabel>Name</CFormLabel>
+                <CFormLabel className="user-details-label">Name</CFormLabel>
                 <CFormInput
+                  className="user-details-input"
                   value={userData.name}
                   onChange={(e) => handleChange('name', e.target.value)}
                 />
               </CCol>
               <CCol xs={12} md={6}>
-                <CFormLabel>userId</CFormLabel>
-                <CFormInput value={userData.username} />
+                <CFormLabel className="user-details-label">User ID</CFormLabel>
+                <CFormInput className="user-details-input" value={userData.username} />
               </CCol>
               <CCol xs={12} md={6}>
-                <CFormLabel>Email</CFormLabel>
+                <CFormLabel className="user-details-label">Email</CFormLabel>
                 <div className="d-flex gap-2 align-items-center">
                   <CFormInput
+                    className="user-details-input"
                     type="email"
                     value={userData.email}
                     onChange={(e) => handleChange('email', e.target.value)}
@@ -171,6 +176,7 @@ const UserDetailsModal = ({ show, onHide, userId, onUserUpdated }) => {
                   <CButton
                     color={userData.isVerified.email ? 'success' : 'warning'}
                     size="sm"
+                    className="user-details-action-btn"
                     onClick={handleVerifyEmail}
                     disabled={userData.isVerified.email || verifyingEmail}
                   >
@@ -183,15 +189,17 @@ const UserDetailsModal = ({ show, onHide, userId, onUserUpdated }) => {
                 </div>
               </CCol>
               <CCol xs={12} md={6}>
-                <CFormLabel>Phone</CFormLabel>
+                <CFormLabel className="user-details-label">Phone</CFormLabel>
                 <div className="d-flex gap-2 align-items-center">
                   <CFormInput
+                    className="user-details-input"
                     value={userData.phone}
                     onChange={(e) => handleChange('phone', e.target.value)}
                   />
                   <CButton
                     color={userData.isVerified.phone ? 'success' : 'warning'}
                     size="sm"
+                    className="user-details-action-btn"
                     onClick={handleVerifyPhone}
                     disabled={userData.isVerified.phone || verifyingPhone}
                   >
@@ -204,16 +212,18 @@ const UserDetailsModal = ({ show, onHide, userId, onUserUpdated }) => {
                 </div>
               </CCol>
               <CCol xs={12} md={6}>
-                <CFormLabel>Birthday</CFormLabel>
+                <CFormLabel className="user-details-label">Birthday</CFormLabel>
                 <CFormInput
+                  className="user-details-input"
                   type="date"
                   value={userData.birthday}
                   onChange={(e) => handleChange('birthday', e.target.value)}
                 />
               </CCol>
               <CCol xs={12} md={6}>
-                <CFormLabel>Country</CFormLabel>
+                <CFormLabel className="user-details-label">Country</CFormLabel>
                 <CFormInput
+                  className="user-details-input"
                   value={userData.country}
                   onChange={(e) => handleChange('country', e.target.value)}
                 />
@@ -222,14 +232,31 @@ const UserDetailsModal = ({ show, onHide, userId, onUserUpdated }) => {
           )}
         </CModalBody>
         <CModalFooter>
-          <CButton color="success" onClick={handleSave} disabled={saving || loading}>
+          <CButton
+            color="success"
+            className="user-details-action-btn"
+            onClick={() => setShowSaveConfirmation(true)}
+            disabled={saving || loading}
+          >
             {saving ? <CSpinner size="sm" /> : 'Save Changes'}
           </CButton>
-          <CButton color="secondary" onClick={onHide}>
+          <CButton color="secondary" className="user-details-action-btn" onClick={onHide}>
             Close
           </CButton>
         </CModalFooter>
       </CModal>
+
+      <ConfirmationModal
+        visible={showSaveConfirmation}
+        onClose={() => setShowSaveConfirmation(false)}
+        onConfirm={handleSave}
+        title="Confirm Profile Update"
+        message="Save all edited user profile fields now?"
+        variant="warning"
+        confirmText="Save Profile"
+        eventLabel={userData.username || userData.email || userId || 'User Profile'}
+        loading={saving}
+      />
     </>
   )
 }

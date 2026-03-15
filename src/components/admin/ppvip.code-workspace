@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "../../../../ppvip"
+		},
+		{
+			"path": "../../../../backend"
+		},
+		{
+			"path": "../../.."
+		}
+	],
+	"settings": {
+		"chat.tools.terminal.autoApprove": {
+			"npm install": true
+		}
+	}
+}

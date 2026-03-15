@@ -1,0 +1,84 @@
+.user-details-modal-glass .modal-content {
+  background: linear-gradient(145deg, rgba(13, 22, 46, 0.9), rgba(15, 44, 80, 0.76));
+  border: 1px solid rgba(110, 190, 255, 0.36);
+  border-radius: 18px;
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 0 24px rgba(55, 165, 255, 0.24);
+  backdrop-filter: blur(14px);
+  transform-style: preserve-3d;
+  animation: userDetailsModalPop 0.45s ease-out;
+}
+
+.user-details-modal-glass .modal-header,
+.user-details-modal-glass .modal-footer {
+  border-color: rgba(135, 203, 255, 0.22);
+  background: rgba(7, 18, 37, 0.45);
+}
+
+.user-details-modal-title {
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: #d9f3ff;
+  text-shadow: 0 0 12px rgba(94, 203, 255, 0.55);
+}
+
+.user-details-label {
+  color: #9ad3fb;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.76rem;
+  margin-bottom: 0.45rem;
+}
+
+.user-details-input {
+  border-radius: 12px;
+  border: 1px solid rgba(126, 206, 255, 0.25);
+  background: rgba(11, 26, 48, 0.62);
+  color: #eff9ff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.user-details-input:focus {
+  border-color: rgba(135, 225, 255, 0.65);
+  box-shadow: 0 0 0 0.2rem rgba(84, 199, 255, 0.2);
+  background: rgba(13, 30, 55, 0.78);
+  color: #ffffff;
+}
+
+.user-details-input[readonly],
+.user-details-input:disabled {
+  background: rgba(8, 20, 39, 0.78);
+  color: #bddcf5;
+}
+
+.user-details-action-btn {
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.user-details-loading-wrap {
+  color: #dff4ff;
+}
+
+.user-details-toast {
+  border: 1px solid rgba(127, 210, 255, 0.35);
+  backdrop-filter: blur(8px);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.35),
+    0 0 12px rgba(99, 199, 255, 0.25);
+}
+
+@keyframes userDetailsModalPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) rotateX(7deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateX(0deg);
+  }
+}

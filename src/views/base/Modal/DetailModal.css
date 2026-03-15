@@ -1,0 +1,98 @@
+.detail-modal-glass .modal-content {
+  background: linear-gradient(145deg, rgba(13, 22, 46, 0.88), rgba(18, 42, 73, 0.72));
+  border: 1px solid rgba(110, 190, 255, 0.35);
+  border-radius: 18px;
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 0 24px rgba(55, 165, 255, 0.25);
+  backdrop-filter: blur(14px);
+  transform-style: preserve-3d;
+  animation: modalPop 0.45s ease-out;
+}
+
+.detail-modal-glass .modal-header,
+.detail-modal-glass .modal-footer {
+  border-color: rgba(135, 203, 255, 0.22);
+  background: rgba(7, 18, 37, 0.45);
+}
+
+.detail-modal-title {
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: #d9f3ff;
+  text-shadow: 0 0 12px rgba(94, 203, 255, 0.55);
+}
+
+.detail-data-card {
+  height: 100%;
+  padding: 0.9rem 0.95rem;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 206, 255, 0.22);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(116, 192, 255, 0.05));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 8px 22px rgba(0, 0, 0, 0.25);
+  transform: translateZ(0);
+  transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+.detail-data-card:hover {
+  transform: translateY(-4px) translateZ(8px);
+  border-color: rgba(124, 231, 255, 0.58);
+  box-shadow:
+    0 14px 26px rgba(0, 0, 0, 0.32),
+    0 0 12px rgba(101, 220, 255, 0.3);
+}
+
+.detail-key {
+  color: #8dc9f2;
+  font-size: 0.81rem;
+  text-transform: uppercase;
+  letter-spacing: 0.55px;
+}
+
+.detail-value,
+.detail-value-pre {
+  color: #f2fbff;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.detail-value-pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 0.82rem;
+  max-height: 170px;
+  overflow: auto;
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px;
+  background: rgba(6, 21, 40, 0.55);
+  border: 1px solid rgba(133, 207, 255, 0.24);
+}
+
+.detail-action-btn {
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.detail-action-approve {
+  box-shadow: 0 0 18px rgba(66, 207, 123, 0.35);
+}
+
+.detail-action-reject {
+  box-shadow: 0 0 18px rgba(245, 106, 106, 0.3);
+}
+
+@keyframes modalPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) rotateX(7deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateX(0deg);
+  }
+}
